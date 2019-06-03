@@ -6,3 +6,5 @@ Learning to track my code
 Learning about Python this week. 
 
 # learning about git changes and commits. 
+
+# Zach says we can type anything
