@@ -1,32 +1,33 @@
 #!/usr/bin/python3
 """ FitzJon | author: jonathan.fitz@vzw.com | learning about API requests"""
 
-# Import JSON and Ability to pull API 
-import json
-import urllib.request
+# Import JSON and Ability to pull API  BUT NOW WITH REQUESTS MODULE
+import requests
 
 # Constant for JSON API File
 MAJORTOM = "http://api.open-notify.org/astros.json"
 
 def main():
-    # make request 
-    resp = urllib.request.urlopen(MAJORTOM)
-    
-    # make python fetch out JSON data set from the API from 200 response
-    jstring = resp.read()
+    try:
 
-    # convert string data to JSON
-    pyj = json.loads(jstring.decode('utf-8'))
+        # make request 
+        resp = requests.get(MAJORTOM)
+        # CAN ALSO DO pyj = requests.get(MAJORTOM).json()   THEN GET RID OF PYJ = resp.json()
 
-    # Parse out JSON attached we stripped off the response from the API
-    print(pyj)
-    astrocosmo = pyj.get("people")
+        # convert string data to JSON
+        pyj = resp.json()
 
-    # display selected data on screen - names of people in space /
-    print("CURRENTLY IN SPACE:")
-    for spaceperson in astrocosmo:
-        print(spaceperson["name"])
+        # Parse out JSON attached we stripped off the response from the API
+        # print(pyj)
+        astrocosmo = pyj.get("people")
 
+        # display selected data on screen - names of people in space /
+        print("CURRENTLY IN SPACE:")
+        for spaceperson in astrocosmo:
+            print(spaceperson["name"])
+
+    except:
+        print("API is unavailable at the moment")
 
 if __name__ == "__main__":
     main()
