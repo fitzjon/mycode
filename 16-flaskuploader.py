@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/python3
 
 import re
+import smtplib
 import json
+from email.message import EmailMessage
 
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug import secure_filename
@@ -35,6 +38,24 @@ def sip(filetoparse):
                 tinylist.append(matchobj.group(3))
                 sipjson.append(tinylist)
         return json.dumps(sipjson)
+
+@app.route("/emailsender")
+def emailsender():
+    msg = EmailMessage()
+    msg['Subject'] = "This is FITZ Subject Line"
+    msg['From'] = "pythonstudent01@mail.com"
+    msg['To'] = "rzfeeserspam@gmail.com"
+    msg.preamble = "Hey you just got a message from Jonathan Fitz"
+
+    with open("/home/student/emailpassword.txt") as emailpass:
+        myemailpass = emailpass.read().rstrip("\n")
+    mail = smtplib.SMTP("smtp.mail.com",587)
+    mail.starttls()
+    mail.login("pythonstudent01@mail.com", myemailpass)
+    mail.sendmail("pythonstudent01@mail.com", "rzfeeserspam@gmail.com", msg.as_string())
+    mail.quit()
+    return "Spammity SpamCakes sent"
+
 
 if __name__ == "__main__":
     app.run(port = 5006)
